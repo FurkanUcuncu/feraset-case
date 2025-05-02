@@ -10,7 +10,9 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
-    Manrope: require('../assets/fonts/Manrope-Regular.ttf')
+    ManropeRegular: require('../assets/fonts/Manrope-Regular.ttf'),
+    ManropeBold: require('../assets/fonts/Manrope-Bold.ttf'),
+    ManropeExtraBold: require('../assets/fonts/Manrope-ExtraBold.ttf')
   });
 
   if (!loaded) {
