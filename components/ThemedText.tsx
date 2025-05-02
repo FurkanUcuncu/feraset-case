@@ -5,7 +5,7 @@ import { useThemeColor } from '@/hooks/useThemeColor';
 export type ThemedTextProps = TextProps & {
   lightColor?: string;
   darkColor?: string;
-  type?: 'default' | 'title' | 'defaultSemiBold' | 'subtitle' | 'link';
+  type?: 'default' | 'title' | 'defaultBold' | 'defaultExtraBold' | 'subtitle' | 'link';
 };
 
 export function ThemedText({
@@ -22,10 +22,8 @@ export function ThemedText({
       style={[
         { color },
         type === 'default' ? styles.default : undefined,
-        type === 'title' ? styles.title : undefined,
-        type === 'defaultSemiBold' ? styles.defaultSemiBold : undefined,
-        type === 'subtitle' ? styles.subtitle : undefined,
-        type === 'link' ? styles.link : undefined,
+        type === 'defaultBold' ? styles.defaultBold : undefined,
+        type === 'defaultExtraBold' ? styles.defaultBold : undefined,
         style,
       ]}
       {...rest}
@@ -35,27 +33,23 @@ export function ThemedText({
 
 const styles = StyleSheet.create({
   default: {
-    fontFamily: 'Manrope',
+    fontFamily: 'ManropeRegular',
     fontSize: 16,
     lineHeight: 24,
+    color: '#fff'
   },
-  defaultSemiBold: {
+  defaultBold: {
+    fontFamily: 'ManropeBold',
     fontSize: 16,
     lineHeight: 24,
-    fontWeight: '600',
+    color: '#fff',
+    fontWeight: '700',
   },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    lineHeight: 32,
-  },
-  subtitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  link: {
-    lineHeight: 30,
+  defaultExtraBold: {
+    fontFamily: 'ManropeExtraBold',
     fontSize: 16,
-    color: '#0a7ea4',
-  },
+    lineHeight: 24,
+    fontWeight: '800',
+    color: '#fff'
+  }
 });
