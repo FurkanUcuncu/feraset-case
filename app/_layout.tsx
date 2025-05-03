@@ -4,15 +4,17 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
 import 'react-native-reanimated';
+import { Provider } from "react-redux";
 
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { store } from '@/store';
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
-    ManropeRegular: require('../assets/fonts/Manrope-Regular.ttf'),
-    ManropeBold: require('../assets/fonts/Manrope-Bold.ttf'),
-    ManropeExtraBold: require('../assets/fonts/Manrope-ExtraBold.ttf')
+    ManropeRegular: require('@/assets/fonts/Manrope-Regular.ttf'),
+    ManropeBold: require('@/assets/fonts/Manrope-Bold.ttf'),
+    ManropeExtraBold: require('@/assets/fonts/Manrope-ExtraBold.ttf')
   });
 
   if (!loaded) {
@@ -21,16 +23,18 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <View style={styles.container}>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-          <Stack.Screen name="design" options={{ headerShown: false }} />
-          <Stack.Screen name="+not-found" />
-        </Stack>
-        <StatusBar style="auto" />
-      </View>
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <View style={styles.container}>
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name='index' options={{ headerShown: false }} />
+            <Stack.Screen name='design' options={{ headerShown: false }} />
+            <Stack.Screen name='+not-found' />
+          </Stack>
+          <StatusBar style={colorScheme === 'dark' ? 'dark' : 'light'} />
+        </View>
+      </ThemeProvider>
+    </Provider>
   );
 }
 
