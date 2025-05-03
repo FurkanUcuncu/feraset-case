@@ -1,11 +1,9 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import 'react-native-reanimated';
 import { Provider } from "react-redux";
-
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { store } from '@/store';
 
@@ -24,22 +22,12 @@ export default function RootLayout() {
 
   return (
     <Provider store={store}>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <View style={styles.container}>
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name='index' options={{ headerShown: false }} />
-            <Stack.Screen name='design' options={{ headerShown: false }} />
-            <Stack.Screen name='+not-found' />
-          </Stack>
-          <StatusBar style={colorScheme === 'dark' ? 'dark' : 'light'} />
-        </View>
-      </ThemeProvider>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name='index' options={{ headerShown: false }} />
+          <Stack.Screen name='design' options={{ headerShown: false }} />
+          <Stack.Screen name='+not-found' />
+        </Stack>
+      <StatusBar style={colorScheme === 'dark' ? 'dark' : 'light'} />
     </Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  }
-})

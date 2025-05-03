@@ -1,6 +1,7 @@
 import { Colors } from '@/constants/Colors';
 import { IMAGE_PROCESS } from '@/constants/Constants';
 import { useAppSelector } from '@/hooks/redux';
+import { useRouter } from 'expo-router';
 import { useEffect, useRef } from 'react';
 import { Animated, Easing, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
@@ -13,6 +14,7 @@ const ErrorOverlayImage = require('../assets/images/subtract.png');
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 export default function ProcessChip() {
+    const router = useRouter();
     const { loading } = useAppSelector(state => state?.logo);
 
     const animatedValue = useRef(new Animated.Value(0)).current;
@@ -40,7 +42,7 @@ export default function ProcessChip() {
     const _IMAGE_PROCESS = IMAGE_PROCESS?.[loading ?? 'loading']
 
     return (
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => router.push({ pathname: '/design', params: {logoStyle: 'Monogram'}})}>
             <View style={styles.createLoaderContainer}>
                 <View style={styles.createLoaderImage}>
                     {

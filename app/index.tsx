@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { changeLoading, createLogo } from '@/store/logo/logoSlice';
 import React, { useCallback, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import ScreenWrapper from "@/components/ScreenWrapper";
 
 const ButtonIcon = require('../assets/images/elements.png');
 
@@ -31,69 +31,57 @@ export default function IndexPage() {
   }, [])
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
-        <ThemedText type='defaultExtraBold' style={styles.header}>AI Logo</ThemedText>
-        {loading !== null ? <ProcessChip /> : null}
-        <View style={styles.labelContainer}>
-          <ThemedText type='defaultExtraBold' style={styles.label}>Enter Your Prompt</ThemedText>
-          <TouchableOpacity>
-            <ThemedText style={styles.surpriseMeText}>🎲   Surprise me</ThemedText>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.inputContainer}>
-          <GradientBackgroundView color='dark' style={styles.gradientBackground}>
-            <TextInput
-              style={[styles.input, { backgroundColor: 'transparent' }]}
-              placeholder="A blue lion logo reading 'HEXA' in bold letters"
-              placeholderTextColor="#71717A"
-              value={prompt}
-              onChangeText={setPrompt}
-              multiline
-              maxLength={500}
-            />
-          </GradientBackgroundView>
-          <ThemedText style={styles.charCount}>{prompt.length}/500</ThemedText>
-        </View>      
-        <ThemedText type='defaultExtraBold' style={{ ...styles.label, marginTop: 24 }}>Logo Styles</ThemedText>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.logoStylesRow}>
-          {LOGO_STYLES.map((style, idx) => (
-            <View style={styles.logoWrapper} key={style.label}>
-              <TouchableOpacity
-                style={[styles.logoStyle, selectedStyle === idx && styles.logoStyleSelected]}
-                onPress={() => setSelectedStyle(idx)}
-              >
-                <Image style={[styles.icon, selectedStyle === idx && styles.logoStyleSelected]} source={style.icon} />
-              </TouchableOpacity>
-              <Text style={[styles.logoLabel, selectedStyle === idx && styles.logoLabelSelected]}>{style.label}</Text>
-            </View>
-          ))}
-        </ScrollView>
-        <TouchableOpacity onPress={handleCreateLogo}>
-          <GradientBackgroundView
-            color='light'
-            style={styles.createButton}
-          >
-            <Text style={styles.createButtonText}>Create</Text>
-            <Image source={ButtonIcon} />
-          </GradientBackgroundView>
+    <ScreenWrapper>
+      <ThemedText type='defaultExtraBold' style={styles.header}>AI Logo</ThemedText>
+      {loading !== null ? <ProcessChip /> : null}
+      <View style={styles.labelContainer}>
+        <ThemedText type='defaultExtraBold' style={styles.label}>Enter Your Prompt</ThemedText>
+        <TouchableOpacity>
+          <ThemedText style={styles.surpriseMeText}>🎲   Surprise me</ThemedText>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+      <View style={styles.inputContainer}>
+        <GradientBackgroundView color='dark' style={styles.gradientBackground}>
+          <TextInput
+            style={[styles.input, { backgroundColor: 'transparent' }]}
+            placeholder="A blue lion logo reading 'HEXA' in bold letters"
+            placeholderTextColor="#71717A"
+            value={prompt}
+            onChangeText={setPrompt}
+            multiline
+            maxLength={500}
+          />
+        </GradientBackgroundView>
+        <ThemedText style={styles.charCount}>{prompt.length}/500</ThemedText>
+      </View>      
+      <ThemedText type='defaultExtraBold' style={{ ...styles.label, marginTop: 24 }}>Logo Styles</ThemedText>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.logoStylesRow}>
+        {LOGO_STYLES.map((style, idx) => (
+          <View style={styles.logoWrapper} key={style.label}>
+            <TouchableOpacity
+              style={[styles.logoStyle, selectedStyle === idx && styles.logoStyleSelected]}
+              onPress={() => setSelectedStyle(idx)}
+            >
+              <Image style={[styles.icon, selectedStyle === idx && styles.logoStyleSelected]} source={style.icon} />
+            </TouchableOpacity>
+            <Text style={[styles.logoLabel, selectedStyle === idx && styles.logoLabelSelected]}>{style.label}</Text>
+          </View>
+        ))}
+      </ScrollView>
+      <TouchableOpacity onPress={handleCreateLogo}>
+        <GradientBackgroundView
+          color='light'
+          style={styles.createButton}
+        >
+          <Text style={styles.createButtonText}>Create</Text>
+          <Image source={ButtonIcon} />
+        </GradientBackgroundView>
+      </TouchableOpacity>
+    </ScreenWrapper>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#18182F',
-  },
-  container: {
-    flex: 1,
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    backgroundColor: '#18182F',
-  },
   header: {
     color: '#FAFAFA',
     fontSize: 17,
