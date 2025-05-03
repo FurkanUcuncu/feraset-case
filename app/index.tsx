@@ -1,7 +1,10 @@
+import { GradientBackgroundView } from '@/components/GradientBackgroundView';
+import ProcessChip from '@/components/ProcessChip';
 import { ThemedText } from '@/components/ThemedText';
 import { Colors } from '@/constants/Colors';
-import { LinearGradient } from 'expo-linear-gradient';
-import React, { useState } from 'react';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+import { changeLoading, createLogo } from '@/store/logo/logoSlice';
+import React, { useCallback, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -15,13 +18,23 @@ const LOGO_STYLES = [
 ];
 
 export default function IndexPage() {
+  const dispatch = useAppDispatch();
+
+  const { loading } = useAppSelector(state => state?.logo);
+
   const [prompt, setPrompt] = useState('');
   const [selectedStyle, setSelectedStyle] = useState(0);
+
+  const handleCreateLogo = useCallback(() => {
+    dispatch(changeLoading('loading'));
+    dispatch(createLogo());
+  }, [])
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <ThemedText type='defaultExtraBold' style={styles.header}>AI Logo</ThemedText>
+        {loading !== null ? <ProcessChip /> : null}
         <View style={styles.labelContainer}>
           <ThemedText type='defaultExtraBold' style={styles.label}>Enter Your Prompt</ThemedText>
           <TouchableOpacity>
@@ -29,15 +42,17 @@ export default function IndexPage() {
           </TouchableOpacity>
         </View>
         <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="A blue lion logo reading 'HEXA' in bold letters"
-            placeholderTextColor="#71717A"
-            value={prompt}
-            onChangeText={setPrompt}
-            multiline
-            maxLength={500}
-          />
+          <GradientBackgroundView color='dark' style={styles.gradientBackground}>
+            <TextInput
+              style={[styles.input, { backgroundColor: 'transparent' }]}
+              placeholder="A blue lion logo reading 'HEXA' in bold letters"
+              placeholderTextColor="#71717A"
+              value={prompt}
+              onChangeText={setPrompt}
+              multiline
+              maxLength={500}
+            />
+          </GradientBackgroundView>
           <ThemedText style={styles.charCount}>{prompt.length}/500</ThemedText>
         </View>      
         <ThemedText type='defaultExtraBold' style={{ ...styles.label, marginTop: 24 }}>Logo Styles</ThemedText>
@@ -54,17 +69,14 @@ export default function IndexPage() {
             </View>
           ))}
         </ScrollView>
-        <TouchableOpacity style={styles.createButton}>
-          <LinearGradient
-            colors={['#943DFF', '#943DFF', '#2938DC']}
-            locations={[0, 0.2459, 1]}
-            start={{ x: 1, y: 0 }}
-            end={{ x: 0, y: 0 }}
-            style={StyleSheet.absoluteFill} // or any other custom styles
-          />
-          {/* background: linear-gradient(270deg, #943DFF 24.59%, #2938DC 100%); */}
-          <Text style={styles.createButtonText}>Create</Text>
-          <Image source={ButtonIcon} />
+        <TouchableOpacity onPress={handleCreateLogo}>
+          <GradientBackgroundView
+            color='light'
+            style={styles.createButton}
+          >
+            <Text style={styles.createButtonText}>Create</Text>
+            <Image source={ButtonIcon} />
+          </GradientBackgroundView>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -109,18 +121,19 @@ const styles = StyleSheet.create({
     lineHeight: 18
   },
   inputContainer: {
-    position: 'relative',
+    position: 'relative'
+  },
+  gradientBackground: {
+    borderRadius: 16
   },
   input: {
-    backgroundColor: '#27272A',
     color: Colors.light.text,
-    borderRadius: 16,
-    paddingHorizontal: 12,
-    paddingTop: 12,
-    paddingBottom: 32,
+    borderRadius: 20,
     fontSize: 16,
     lineHeight: 21,
     minHeight: 175,
+    marginBottom: 0,
+    backgroundColor: 'transparent',
   },
   charCount: {
     color: '#71717A',
@@ -164,7 +177,8 @@ const styles = StyleSheet.create({
     color: '#A1A1AA',
     fontSize: 13,
     lineHeight: 18,
-    marginRight: 16
+    marginRight: 16,
+    marginTop: 4
   },
   logoLabelSelected: {
     color: '#fff',
@@ -196,5 +210,5 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     overflow: 'hidden',
     marginBottom: 8,
-  },
+  }
 }); 
