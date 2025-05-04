@@ -1,4 +1,14 @@
 import { Colors } from "./Colors"
+import NoStyleIcon from "@/assets/images/no-style.png";
+import MonogramIcon from "@/assets/images/monogram.png";
+import AbstractIcon from "@/assets/images/abstract.png";
+import MascotIcon from "@/assets/images/mascot.png";
+import { ILogoStyle } from "@/types/logo.types";
+
+export const DELAY_MIN = 3000;
+export const DELAY_MAX = 6000;
+
+export const PROMPTS_PATH: string = 'prompts';
 
 export const GRADIENT = {
     light: {
@@ -35,3 +45,10 @@ export const IMAGE_PROCESS = {
         background: '#EF4444'
     }
 }
+
+export const LOGO_STYLES: ILogoStyle[] = [
+    { label: 'No Style', icon: NoStyleIcon },
+    { label: 'Monogram', icon: MonogramIcon },
+    { label: 'Abstract', icon: AbstractIcon },
+    { label: 'Mascot', icon: MascotIcon },
+];

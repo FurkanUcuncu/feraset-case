@@ -2,14 +2,9 @@ import { Colors } from "@/constants/Colors";
 import { GRADIENT } from "@/constants/Constants";
 import { LinearGradient } from "expo-linear-gradient";
 import { StyleSheet, View } from "react-native";
+import {IGradientBackgroundViewProps} from "@/types/props.types";
 
-interface IProps {
-    children: React.ReactNode,
-    style?: object,
-    color: 'light' | 'dark'
-}
-
-export function GradientBackgroundView({children, style, color}: IProps) {
+export function GradientBackgroundView({children, style, color}: IGradientBackgroundViewProps) {
     return (
         <View style={[styles.gradientWrapper, style]}>
             {
@@ -37,4 +32,4 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         padding: 12
     },
-})
+});

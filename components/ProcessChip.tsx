@@ -21,6 +21,10 @@ export default function ProcessChip() {
     const RADIUS = 13;
     const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
+    const ContentBackground = loading === 'error' ? View : GradientBackgroundView
+
+    const _IMAGE_PROCESS = IMAGE_PROCESS?.[loading ?? 'loading']
+
     useEffect(() => {
         Animated.loop(
             Animated.timing(animatedValue, {
@@ -30,19 +34,20 @@ export default function ProcessChip() {
                 useNativeDriver: false,
             })
         ).start();
-    }, [loading]);
+    }, [loading, animatedValue]);
 
     const strokeDashoffset = animatedValue.interpolate({
         inputRange: [0, 1],
         outputRange: [CIRCUMFERENCE, 0],
     });
-
-    const ContentBackground = loading === 'error' ? View : GradientBackgroundView
-
-    const _IMAGE_PROCESS = IMAGE_PROCESS?.[loading ?? 'loading']
+    
+    const handleNavigateToDesign = () => {
+        if(loading === 'success')
+            router.push('/design');
+    }
 
     return (
-        <TouchableOpacity onPress={() => router.push({ pathname: '/design', params: {logoStyle: 'Monogram'}})}>
+        <TouchableOpacity onPress={handleNavigateToDesign}>
             <View style={styles.createLoaderContainer}>
                 <View style={styles.createLoaderImage}>
                     {
@@ -103,7 +108,7 @@ const styles = StyleSheet.create({
     createLoaderImage: {
         width: 70,
         height: 70,
-        backgroundColor: '#18181B',
+        backgroundColor: Colors.dark.loaderBackground,
         alignItems: 'center',
         justifyContent: 'center',
         alignSelf: 'center',
@@ -114,7 +119,7 @@ const styles = StyleSheet.create({
         width: '100%'
     },
     errorOverlay: {
-        backgroundColor: '#EF4444B2',
+        backgroundColor: Colors.light.LIGHT_200,
         height: '100%',
         width: '100%',
         position: 'absolute',
@@ -124,7 +129,7 @@ const styles = StyleSheet.create({
     },
     createLoaderContent: {
         flex: 1,
-        backgroundColor: '#EF4444',
+        backgroundColor: Colors.light.LIGHT_250,
         position: 'relative',
         height: '100%'
     },
@@ -141,6 +146,6 @@ const styles = StyleSheet.create({
     contentSubtitle: {
         fontSize: 13,
         lineHeight: 18,
-        color: '#71717A'
+        color: Colors.dark.DARK_500
     }
-})
+});

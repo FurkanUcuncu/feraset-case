@@ -1,46 +1,54 @@
 import { getPromiseDelay, getPromiseResult } from "@/utils/PromiseHelper";
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { RootState } from "..";
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {createLogoApi} from "@/services/logoService";
+import {ILoading, ILogoInitialState, ILogoLabel} from "@/types/logo.types";
+import {RootState} from "@/store";
 
-export const createLogo = createAsyncThunk(
+export const createLogo = createAsyncThunk<
+    any,
+    void,
+    { state: RootState }
+>(
     "createLogo",
-    async ({ prompt, style }: { prompt: string; style: string }, thunkAPI) => {
-        thunkAPI.dispatch(changeLoading("loading"));
+    async (_, {dispatch, getState, rejectWithValue}) => {
+        dispatch(changeLoading("loading"));
         const result = getPromiseResult();
 
         const delay = getPromiseDelay();
         await new Promise((res) => setTimeout(res, delay)); // Wait the delay no matter what
 
         if (result !== "success") {
-            return thunkAPI.rejectWithValue("Simulated failure");
+            return rejectWithValue("Simulated failure");
         }
         
         try {
-            const docRef = await createLogoApi({prompt, style});
-
+            const {prompt, logoStyle} = getState()?.logo;
+            const docRef = await createLogoApi({prompt, logoStyle});
             return { id: docRef.id };
         } catch (e: any) {
-            // Real Firestore error
-            return thunkAPI.rejectWithValue(e.message || "Firestore error");
+            return rejectWithValue(e.message || "Firestore error");
         }
     }
 );
 
-const initialState: {
-    loading: 'loading' | 'success' | 'error' | null;
-} = {
-    loading: null
+const initialState: ILogoInitialState = {
+    loading: null,
+    prompt: '',
+    logoStyle: 'No Style'
 };
-
-// export const getLogoState = (state: RootState) => state?.logo;
 
 export const logoSlice = createSlice({
     name: "logo",
     initialState,
     reducers: {
-        changeLoading(state, action) {
+        changeLoading(state, action: PayloadAction<ILoading>) {
             state.loading = action.payload;
+        },
+        changePrompt(state, action: PayloadAction<string>){
+            state.prompt = action.payload;
+        },
+        changeLogoStyle(state, action: PayloadAction<ILogoLabel>) {
+            state.logoStyle = action.payload;
         }
     },
     extraReducers: (builder) => {
@@ -55,4 +63,6 @@ export const logoSlice = createSlice({
 
 export const {
     changeLoading,
+    changePrompt,
+    changeLogoStyle
 } = logoSlice.actions;

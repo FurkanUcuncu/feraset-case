@@ -2,6 +2,7 @@ import { StyleSheet, Text } from 'react-native';
 
 import { useThemeColor } from '@/hooks/useThemeColor';
 import {IThemedTextProps} from "@/types/props.types";
+import {Colors} from "@/constants/Colors";
 
 export function ThemedText({
   style,
@@ -31,13 +32,13 @@ const styles = StyleSheet.create({
     fontFamily: 'ManropeRegular',
     fontSize: 16,
     lineHeight: 24,
-    color: '#fff'
+    color: Colors.light.background
   },
   defaultBold: {
     fontFamily: 'ManropeBold',
     fontSize: 16,
     lineHeight: 24,
-    color: '#fff',
+    color: Colors.light.background,
     fontWeight: '700',
   },
   defaultExtraBold: {
@@ -45,6 +46,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 24,
     fontWeight: '800',
-    color: '#fff'
+    color: Colors.light.background
   }
 });
