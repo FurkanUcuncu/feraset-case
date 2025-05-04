@@ -19,7 +19,7 @@ export function GradientBackgroundView({children, style, color}: IProps) {
                 /> : null
             }
             <LinearGradient
-                colors={Colors[color].gradientBackground}
+                colors={Colors[color]?.gradientBackground}
                 locations={color === 'light' ? GRADIENT[color]?.locations : undefined}
                 start={GRADIENT?.[color]?.start}
                 end={GRADIENT?.[color]?.end}
