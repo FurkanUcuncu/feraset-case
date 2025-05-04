@@ -1,5 +1,6 @@
 {
   "expo": {
+    "owner" : "Furkan Ucuncu",
     "name": "feraset-case",
     "slug": "feraset-case",
     "version": "1.0.0",
