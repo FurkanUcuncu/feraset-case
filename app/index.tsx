@@ -3,19 +3,13 @@ import ProcessChip from '@/components/ProcessChip';
 import { ThemedText } from '@/components/ThemedText';
 import { Colors } from '@/constants/Colors';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
-import { changeLoading, createLogo } from '@/store/logo/logoSlice';
+import { createLogo } from '@/store/logo/logoSlice';
 import React, { useCallback, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import ScreenWrapper from "@/components/ScreenWrapper";
 
-const ButtonIcon = require('../assets/images/elements.png');
-
-const LOGO_STYLES = [
-  { label: 'No Style', icon: require('../assets/images/no-style.png') },
-  { label: 'Monogram', icon: require('../assets/images/monogram.png') },
-  { label: 'Abstract', icon: require('../assets/images/abstract.png') },
-  { label: 'Mascot', icon: require('../assets/images/mascot.png') },
-];
+import ButtonIcon from '../assets/images/elements.png';
+import { LOGO_STYLES } from '@/constants/Constants';
 
 export default function IndexPage() {
   const dispatch = useAppDispatch();
@@ -23,12 +17,11 @@ export default function IndexPage() {
   const { loading } = useAppSelector(state => state?.logo);
 
   const [prompt, setPrompt] = useState('');
-  const [selectedStyle, setSelectedStyle] = useState(0);
+  const [selectedStyle, setSelectedStyle] = useState('No Style');
 
   const handleCreateLogo = useCallback(() => {
-    dispatch(changeLoading('loading'));
-    dispatch(createLogo());
-  }, [])
+    dispatch(createLogo({ prompt, style: selectedStyle }));
+  }, [dispatch, prompt ,selectedStyle])
 
   return (
     <ScreenWrapper>
@@ -40,43 +33,45 @@ export default function IndexPage() {
           <ThemedText style={styles.surpriseMeText}>🎲   Surprise me</ThemedText>
         </TouchableOpacity>
       </View>
-      <View style={styles.inputContainer}>
-        <GradientBackgroundView color='dark' style={styles.gradientBackground}>
-          <TextInput
-            style={[styles.input, { backgroundColor: 'transparent' }]}
-            placeholder="A blue lion logo reading 'HEXA' in bold letters"
-            placeholderTextColor="#71717A"
-            value={prompt}
-            onChangeText={setPrompt}
-            multiline
-            maxLength={500}
-          />
-        </GradientBackgroundView>
-        <ThemedText style={styles.charCount}>{prompt.length}/500</ThemedText>
-      </View>      
-      <ThemedText type='defaultExtraBold' style={{ ...styles.label, marginTop: 24 }}>Logo Styles</ThemedText>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.logoStylesRow}>
-        {LOGO_STYLES.map((style, idx) => (
-          <View style={styles.logoWrapper} key={style.label}>
-            <TouchableOpacity
-              style={[styles.logoStyle, selectedStyle === idx && styles.logoStyleSelected]}
-              onPress={() => setSelectedStyle(idx)}
-            >
-              <Image style={[styles.icon, selectedStyle === idx && styles.logoStyleSelected]} source={style.icon} />
-            </TouchableOpacity>
-            <Text style={[styles.logoLabel, selectedStyle === idx && styles.logoLabelSelected]}>{style.label}</Text>
-          </View>
-        ))}
+      <ScrollView>
+        <View style={styles.inputContainer}>
+          <GradientBackgroundView color='dark' style={styles.gradientBackground}>
+            <TextInput
+                style={[styles.input, { backgroundColor: 'transparent' }]}
+                placeholder="A blue lion logo reading 'HEXA' in bold letters"
+                placeholderTextColor="#71717A"
+                value={prompt}
+                onChangeText={setPrompt}
+                multiline
+                maxLength={500}
+            />
+          </GradientBackgroundView>
+          <ThemedText style={styles.charCount}>{prompt.length}/500</ThemedText>
+        </View>
+        <ThemedText type='defaultExtraBold' style={{ ...styles.label, marginTop: 24 }}>Logo Styles</ThemedText>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.logoStylesRow}>
+          {LOGO_STYLES.map((style) => (
+              <View style={styles.logoWrapper} key={style.label}>
+                <TouchableOpacity
+                    style={[styles.logoStyle, selectedStyle === style.label && styles.logoStyleSelected]}
+                    onPress={() => setSelectedStyle(style.label)}
+                >
+                  <Image style={[styles.icon, selectedStyle === style.label && styles.logoStyleSelected]} source={style.icon} />
+                </TouchableOpacity>
+                <Text style={[styles.logoLabel, selectedStyle === style.label && styles.logoLabelSelected]}>{style.label}</Text>
+              </View>
+          ))}
+        </ScrollView>
+        <TouchableOpacity onPress={handleCreateLogo}>
+          <GradientBackgroundView
+            color='light'
+            style={styles.createButton}
+          >
+            <Text style={styles.createButtonText}>Create</Text>
+            <Image source={ButtonIcon} />
+          </GradientBackgroundView>
+        </TouchableOpacity>
       </ScrollView>
-      <TouchableOpacity onPress={handleCreateLogo}>
-        <GradientBackgroundView
-          color='light'
-          style={styles.createButton}
-        >
-          <Text style={styles.createButtonText}>Create</Text>
-          <Image source={ButtonIcon} />
-        </GradientBackgroundView>
-      </TouchableOpacity>
     </ScreenWrapper>
   );
 }
@@ -116,12 +111,11 @@ const styles = StyleSheet.create({
   },
   input: {
     color: Colors.light.text,
-    borderRadius: 20,
+    borderRadius: 16,
     fontSize: 16,
     lineHeight: 21,
     minHeight: 175,
-    marginBottom: 0,
-    backgroundColor: 'transparent',
+    textAlignVertical: 'top'
   },
   charCount: {
     color: '#71717A',

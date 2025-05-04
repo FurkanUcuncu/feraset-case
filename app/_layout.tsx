@@ -1,7 +1,6 @@
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet } from 'react-native';
 import 'react-native-reanimated';
 import { Provider } from "react-redux";
 import { useColorScheme } from '@/hooks/useColorScheme';

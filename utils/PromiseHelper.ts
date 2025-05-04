@@ -1,10 +1,10 @@
-export function getPromiseDelay () {
-    const Delays = [3000, 6000]
+import {IPromiseDelay, IPromiseResult} from "@/types/helper.types";
+import {DELAY_MAX, DELAY_MIN} from "@/constants/Constants";
 
-    return Delays[(Math.floor(Math.random() * 2))];
+export function getPromiseDelay (): IPromiseDelay {
+    return Math.random() > 0.5 ? DELAY_MIN : DELAY_MAX;
 }
 
-export function getPromiseResult(): 'success' | 'error' {
-    const Results: ('success' | 'error')[] = ['success', 'error'];
-    return Results[Math.floor(Math.random() * 2)];
+export function getPromiseResult(): IPromiseResult {
+    return Math.random() > 0.5 ? 'success' : 'error';
 }

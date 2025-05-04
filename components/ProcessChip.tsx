@@ -8,8 +8,8 @@ import Svg, { Circle } from 'react-native-svg';
 import { GradientBackgroundView } from './GradientBackgroundView';
 import { ThemedText } from './ThemedText';
 
-const MockImage = require('../assets/images/mockImage.jpg');
-const ErrorOverlayImage = require('../assets/images/subtract.png');
+import MockImage from '../assets/images/mockImage.jpg';
+import ErrorOverlayImage from '../assets/images/subtract.png';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
