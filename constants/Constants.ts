@@ -5,8 +5,8 @@ import AbstractIcon from "@/assets/images/abstract.png";
 import MascotIcon from "@/assets/images/mascot.png";
 import { ILogoStyle } from "@/types/logo.types";
 
-export const DELAY_MIN = 3000;
-export const DELAY_MAX = 6000;
+export const DELAY_MIN = 30000;
+export const DELAY_MAX = 60000;
 
 export const PROMPTS_PATH: string = 'prompts';
 
