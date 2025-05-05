@@ -2,7 +2,7 @@ import { Colors } from '@/constants/Colors';
 import { IMAGE_PROCESS } from '@/constants/Constants';
 import { useAppSelector } from '@/hooks/redux';
 import { useRouter } from 'expo-router';
-import { useEffect, useRef } from 'react';
+import {useCallback, useEffect, useRef} from 'react';
 import { Animated, Easing, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
 import { GradientBackgroundView } from './GradientBackgroundView';
@@ -20,8 +20,6 @@ export default function ProcessChip() {
     const animatedValue = useRef(new Animated.Value(0)).current;
     const RADIUS = 13;
     const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
-
-    const ContentBackground = loading === 'error' ? View : GradientBackgroundView
 
     const _IMAGE_PROCESS = IMAGE_PROCESS?.[loading ?? 'loading']
 
@@ -41,10 +39,26 @@ export default function ProcessChip() {
         outputRange: [CIRCUMFERENCE, 0],
     });
     
-    const handleNavigateToDesign = () => {
+    const handleNavigateToDesign = useCallback(() => {
         if(loading === 'success')
             router.push('/design');
-    }
+    },[loading, router])
+
+    const renderText = () => (
+        <>
+            <ThemedText
+                type='defaultExtraBold'
+                style={[styles.contentTitle, { color: _IMAGE_PROCESS?.titleColor }]}
+            >
+                {_IMAGE_PROCESS?.title}
+            </ThemedText>
+            <ThemedText
+                style={[styles.contentSubtitle, { color: _IMAGE_PROCESS?.subtitleColor }]}
+            >
+                {_IMAGE_PROCESS?.subtitle}
+            </ThemedText>
+        </>
+    );
 
     return (
         <TouchableOpacity onPress={handleNavigateToDesign}>
@@ -85,10 +99,23 @@ export default function ProcessChip() {
                     }
                 </View>
                 <View style={styles.createLoaderContent}>
-                    <ContentBackground color={loading === 'loading' ? 'dark' : 'light'} style={styles.gradientBackground}>
-                        <ThemedText type='defaultExtraBold' style={[styles.contentTitle, { color: _IMAGE_PROCESS?.titleColor }]}>{_IMAGE_PROCESS?.title}</ThemedText>
-                        <ThemedText style={[styles.contentSubtitle, { color: _IMAGE_PROCESS?.subtitleColor }]}>{_IMAGE_PROCESS?.subtitle}</ThemedText>
-                    </ContentBackground>
+                    {loading === 'error' ? 
+                        <View style={styles.gradientBackground}>
+                            {renderText()}
+                        </View> : null
+                    }
+
+                    {loading === 'loading' ?
+                        <GradientBackgroundView color='dark' style={styles.gradientBackground}>
+                            {renderText()}
+                        </GradientBackgroundView> : null
+                    }
+
+                    {loading === 'success' ?
+                        <GradientBackgroundView color='light' style={styles.gradientBackground}>
+                            {renderText()}
+                        </GradientBackgroundView> : null
+                    }
                 </View>
             </View>
         </TouchableOpacity>
