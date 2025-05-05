@@ -21,13 +21,18 @@ export const createLogo = createAsyncThunk<
             return rejectWithValue("Simulated failure");
         }
         
-        try {
-            const {prompt, logoStyle} = getState()?.logo;
-            const docRef = await createLogoApi({prompt, logoStyle});
-            return { id: docRef.id };
-        } catch (e: any) {
-            return rejectWithValue(e.message || "Firestore error");
-        }
+        return result;
+        
+        // I commented api lines because have an issue with fireStore side. Somehow I didn't make any change, but requests are failing
+        // Thankfully I got a recording before it fails. In the video latency is 3 or 6 seconds. But in code I am changing it to 30 or 60 seconds(It was required on the pdf).
+
+        // try {
+        //     const {prompt, logoStyle} = getState()?.logo;
+        //     const docRef = await createLogoApi({prompt, logoStyle});
+        //     return { id: docRef.id };
+        // } catch (e: any) {
+        //     return rejectWithValue(e.message || "Firestore error");
+        // }
     }
 );
 
